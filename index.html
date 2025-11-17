@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Omnichannel - Clínica Médica</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .landing-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .landing-header h1 {
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .landing-header p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.125rem;
+    }
+
+    .landing-content {
+      flex: 1;
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+
+    .feature-description {
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .cta-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .cta-description {
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-button {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cta-button.primary {
+      background: white;
+      color: #667eea;
+    }
+
+    .cta-button.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-button.secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+    }
+
+    .cta-button.secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .info-section {
+      background: #f9fafb;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      margin-bottom: 3rem;
+    }
+
+    .info-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: #1f2937;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .info-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-item h3 {
+      color: #1f2937;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-item p {
+      color: #6b7280;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .landing-footer {
+      background: #1f2937;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .landing-footer p {
+      color: #d1d5db;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .landing-content {
+        padding: 1.5rem;
+      }
+
+      .cta-title {
+        font-size: 1.5rem;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .cta-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing">
+    <!-- Header -->
+    <div class="landing-header">
+      <h1>🏥 Sistema Omnichannel</h1>
+      <p>Plataforma Unificada de Atendimento para Clínicas Médicas</p>
+    </div>
+
+    <!-- Content -->
+    <div class="landing-content">
+      <!-- Features -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3 class="feature-title">Múltiplos Canais</h3>
+          <p class="feature-description">Atenda pacientes através de WhatsApp, Instagram, Facebook, E-mail e Chat em uma única plataforma.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Dashboard Gerencial</h3>
+          <p class="feature-description">Acompanhe métricas em tempo real, desempenho de atendentes e relatórios de produtividade.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Atendimento Rápido</h3>
+          <p class="feature-description">Respostas rápidas, histórico unificado e gestão de filas para atendimento eficiente.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3 class="feature-title">Gestão de Equipe</h3>
+          <p class="feature-description">Supervisione atendentes, redistribua conversas e otimize a distribuição de carga.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3 class="feature-title">Portal do Paciente</h3>
+          <p class="feature-description">Pacientes acompanham suas conversas, agendamentos e recebem notificações automáticas.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">Seguro e Confiável</h3>
+          <p class="feature-description">Autenticação segura, controle de acesso por roles e conformidade com regulamentações.</p>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="cta-section">
+        <h2 class="cta-title">Pronto para Começar?</h2>
+        <p class="cta-description">Transforme o atendimento da sua clínica com nossa plataforma omnichannel</p>
+        <div class="cta-buttons">
+          <button class="cta-button primary" onclick="window.location.href='/pages/login.html'">Fazer Login</button>
+          <button class="cta-button secondary" onclick="scrollToInfo()">Saiba Mais</button>
+        </div>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-section" id="info">
+        <h2 class="info-title">Como Funciona</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <h3>👤 Para Pacientes</h3>
+            <p>Envie mensagens através de seu canal preferido, acompanhe o histórico de conversas e receba notificações de agendamentos.</p>
+          </div>
+
+          <div class="info-item">
+            <h3>👨‍💼 Para Atendentes</h3>
+            <p>Acesse uma caixa de entrada unificada, responda pacientes de todos os canais e utilize respostas rápidas para agilizar o atendimento.</p>
+          </div>
+
+          <div class="info-item">
+            <h3>📊 Para Gerentes</h3>
+            <p>Supervisione conversas em tempo real, analise métricas de desempenho e tome decisões baseadas em dados.</p>
+          </div>
+
+          <div class="info-item">
+            <h3>🔄 Integração Omnichannel</h3>
+            <p>Todos os canais integrados em uma única plataforma, eliminando a dispersão e melhorando a experiência do paciente.</p>
+          </div>
+
+          <div class="info-item">
+            <h3>📈 Análise de Dados</h3>
+            <p>Relatórios detalhados sobre produtividade, satisfação de pacientes e desempenho operacional.</p>
+          </div>
+
+          <div class="info-item">
+            <h3>🚀 Escalabilidade</h3>
+            <p>Sistema preparado para crescer com sua clínica, suportando múltiplos atendentes e canais.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="landing-footer">
+      <p>&copy; 2025 Sistema Omnichannel - Clínica Médica. Todos os direitos reservados.</p>
+    </div>
+  </div>
+
+  <script>
+    function scrollToInfo() {
+      document.getElementById('info').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

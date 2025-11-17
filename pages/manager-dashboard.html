@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Gerente - Sistema Omnichannel</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .dashboard {
+      padding: 2rem;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .dashboard-title h1 {
+      margin: 0;
+    }
+
+    .dashboard-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .metric-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #2563eb;
+    }
+
+    .metric-card.success {
+      border-left-color: #10b981;
+    }
+
+    .metric-card.warning {
+      border-left-color: #f59e0b;
+    }
+
+    .metric-card.danger {
+      border-left-color: #ef4444;
+    }
+
+    .metric-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .metric-change {
+      font-size: 0.75rem;
+      color: #10b981;
+      margin-top: 0.5rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .tab {
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: #6b7280;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .tab.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+    }
+
+    th {
+      background-color: #f9fafb;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    tr:hover {
+      background-color: #f9fafb;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-waiting {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-in-progress {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status-resolved {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .attendant-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .attendant-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .attendant-info h4 {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .attendant-info p {
+      margin: 0;
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    .chart-container {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .chart-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #1f2937;
+    }
+
+    .chart-placeholder {
+      height: 300px;
+      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 1.125rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background-color: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: 1rem;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .tabs {
+        overflow-x: auto;
+      }
+
+      .tab {
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="dashboard-title">
+        <h1>Dashboard Gerencial</h1>
+        <p style="color: #6b7280; margin: 0;">Visão geral do desempenho do sistema</p>
+      </div>
+      <div class="dashboard-actions">
+        <button class="btn btn-secondary btn-sm" onclick="mudarPerfil()">Trocar Perfil</button>
+        <button class="btn btn-secondary btn-sm" onclick="fazerLogout()">Sair</button>
+      </div>
+    </div>
+
+    <!-- Métricas Principais -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Total de Conversas</div>
+        <div class="metric-value">247</div>
+        <div class="metric-change">↑ 12% em relação ao mês anterior</div>
+      </div>
+
+      <div class="metric-card warning">
+        <div class="metric-label">Na Fila de Espera</div>
+        <div class="metric-value">8</div>
+        <div class="metric-change">Tempo médio: 5 minutos</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Em Andamento</div>
+        <div class="metric-value">24</div>
+        <div class="metric-change">Por 15 atendentes</div>
+      </div>
+
+      <div class="metric-card success">
+        <div class="metric-label">Resolvidas Hoje</div>
+        <div class="metric-value">156</div>
+        <div class="metric-change">Taxa de resolução: 92%</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Atendentes Ativos</div>
+        <div class="metric-value">15</div>
+        <div class="metric-change">2 em pausa</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Satisfação Média</div>
+        <div class="metric-value">4.8/5</div>
+        <div class="metric-change">⭐ Excelente desempenho</div>
+      </div>
+    </div>
+
+    <!-- Gráfico de Conversas -->
+    <div class="chart-container">
+      <div class="chart-title">Conversas por Canal</div>
+      <div class="chart-placeholder">
+        📊 Gráfico: WhatsApp (45%) | Instagram (25%) | Email (15%) | Facebook (10%) | Chat (5%)
+      </div>
+    </div>
+
+    <!-- Abas -->
+    <div class="tabs">
+      <button class="tab active" onclick="mudarAba('conversas')">Conversas em Tempo Real</button>
+      <button class="tab" onclick="mudarAba('atendentes')">Desempenho de Atendentes</button>
+      <button class="tab" onclick="mudarAba('relatorios')">Relatórios</button>
+    </div>
+
+    <!-- Aba: Conversas em Tempo Real -->
+    <div id="conversas" class="tab-content active">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Canal</th>
+              <th>Assunto</th>
+              <th>Atendente</th>
+              <th>Status</th>
+              <th>Tempo</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Maria Silva</td>
+              <td>📱 WhatsApp</td>
+              <td>Agendamento de Consulta</td>
+              <td>João</td>
+              <td><span class="status-badge status-in-progress">Em Andamento</span></td>
+              <td>5 min</td>
+              <td><button class="btn btn-sm btn-primary">Supervisionar</button></td>
+            </tr>
+            <tr>
+              <td>João Santos</td>
+              <td>📷 Instagram</td>
+              <td>Resultado de Exame</td>
+              <td>Ana</td>
+              <td><span class="status-badge status-in-progress">Em Andamento</span></td>
+              <td>3 min</td>
+              <td><button class="btn btn-sm btn-primary">Supervisionar</button></td>
+            </tr>
+            <tr>
+              <td>Ana Costa</td>
+              <td>👥 Facebook</td>
+              <td>Dúvida sobre Procedimento</td>
+              <td>Pedro</td>
+              <td><span class="status-badge status-waiting">Aguardando</span></td>
+              <td>8 min</td>
+              <td><button class="btn btn-sm btn-primary">Atribuir</button></td>
+            </tr>
+            <tr>
+              <td>Pedro Oliveira</td>
+              <td>📧 Email</td>
+              <td>Cancelamento de Consulta</td>
+              <td>Maria</td>
+              <td><span class="status-badge status-resolved">Resolvido</span></td>
+              <td>2 min</td>
+              <td><button class="btn btn-sm btn-secondary">Detalhes</button></td>
+            </tr>
+            <tr>
+              <td>Carla Souza</td>
+              <td>💬 Chat</td>
+              <td>Informações sobre Convênio</td>
+              <td>-</td>
+              <td><span class="status-badge status-waiting">Aguardando</span></td>
+              <td>12 min</td>
+              <td><button class="btn btn-sm btn-primary">Atribuir</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Aba: Desempenho de Atendentes -->
+    <div id="atendentes" class="tab-content">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Atendente</th>
+              <th>Conversas Hoje</th>
+              <th>Resolvidas</th>
+              <th>Tempo Médio</th>
+              <th>Taxa de Resolução</th>
+              <th>Satisfação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="attendant-row">
+                  <div class="attendant-avatar">J</div>
+                  <div class="attendant-info">
+                    <h4>João Silva</h4>
+                    <p>Ativo</p>
+                  </div>
+                </div>
+              </td>
+              <td>18</td>
+              <td>16</td>
+              <td>4 min 30s</td>
+              <td>
+                <div>89%</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 89%"></div></div>
+              </td>
+              <td>⭐⭐⭐⭐⭐ 4.9</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="attendant-row">
+                  <div class="attendant-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">A</div>
+                  <div class="attendant-info">
+                    <h4>Ana Costa</h4>
+                    <p>Ativo</p>
+                  </div>
+                </div>
+              </td>
+              <td>20</td>
+              <td>18</td>
+              <td>3 min 45s</td>
+              <td>
+                <div>90%</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 90%"></div></div>
+              </td>
+              <td>⭐⭐⭐⭐⭐ 5.0</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="attendant-row">
+                  <div class="attendant-avatar" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">P</div>
+                  <div class="attendant-info">
+                    <h4>Pedro Oliveira</h4>
+                    <p>Ativo</p>
+                  </div>
+                </div>
+              </td>
+              <td>15</td>
+              <td>13</td>
+              <td>5 min 20s</td>
+              <td>
+                <div>87%</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 87%"></div></div>
+              </td>
+              <td>⭐⭐⭐⭐ 4.7</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="attendant-row">
+                  <div class="attendant-avatar" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">M</div>
+                  <div class="attendant-info">
+                    <h4>Maria Santos</h4>
+                    <p>Pausa</p>
+                  </div>
+                </div>
+              </td>
+              <td>12</td>
+              <td>11</td>
+              <td>6 min 10s</td>
+              <td>
+                <div>92%</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 92%"></div></div>
+              </td>
+              <td>⭐⭐⭐⭐⭐ 4.8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Aba: Relatórios -->
+    <div id="relatorios" class="tab-content">
+      <div class="chart-container">
+        <div class="chart-title">Relatório de Produtividade - Últimos 7 Dias</div>
+        <div class="chart-placeholder">
+          📈 Gráfico: Seg (180) | Ter (195) | Qua (210) | Qui (205) | Sex (220) | Sab (85) | Dom (0)
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-title">Taxa de Satisfação por Canal</div>
+        <div class="chart-placeholder">
+          ⭐ WhatsApp: 4.9 | Instagram: 4.7 | Email: 4.8 | Facebook: 4.6 | Chat: 4.9
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script>
+    // Verificar autenticação
+    if (!estaAutenticado()) {
+      window.location.href = '/pages/login.html';
+    }
+
+    function mudarAba(abaId) {
+      // Remover active de todas as abas
+      document.querySelectorAll('.tab-content').forEach(aba => {
+        aba.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Adicionar active à aba selecionada
+      document.getElementById(abaId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    function mudarPerfil() {
+      window.location.href = '/pages/role-selection.html';
+    }
+
+    function fazerLogout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/pages/login.html';
+    }
+  </script>
+</body>
+</html>

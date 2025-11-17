@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Paciente - Sistema Omnichannel</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .patient-dashboard {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .patient-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .patient-info h1 {
+      margin: 0 0 0.5rem 0;
+    }
+
+    .patient-info p {
+      margin: 0;
+      color: #6b7280;
+    }
+
+    .patient-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .action-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .action-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .action-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .action-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+    }
+
+    .action-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+
+    .action-button {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .action-button:hover {
+      transform: scale(1.02);
+    }
+
+    .channels-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .channels-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #1f2937;
+    }
+
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .channel-item {
+      padding: 1.5rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .channel-item:hover {
+      border-color: #667eea;
+      background-color: #f9fafb;
+    }
+
+    .channel-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .channel-name {
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 0.95rem;
+    }
+
+    .conversations-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .conversations-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #1f2937;
+    }
+
+    .conversation-card {
+      padding: 1.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .conversation-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .conversation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .conversation-title {
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .conversation-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+    }
+
+    .conversation-preview {
+      font-size: 0.95rem;
+      color: #4b5563;
+      margin-bottom: 1rem;
+    }
+
+    .conversation-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .form-actions button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .form-actions .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .form-actions .btn-secondary {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    @media (max-width: 768px) {
+      .patient-dashboard {
+        padding: 1rem;
+      }
+
+      .patient-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .action-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .channels-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="patient-dashboard">
+    <!-- Header -->
+    <div class="patient-header">
+      <div class="patient-info">
+        <h1>Bem-vindo(a)! 👋</h1>
+        <p id="userGreeting">Aqui você pode acompanhar suas conversas e agendamentos</p>
+      </div>
+      <div class="patient-actions">
+        <button class="btn btn-secondary btn-small" onclick="mudarPerfil()">Trocar Perfil</button>
+        <button class="btn btn-secondary btn-small" onclick="fazerLogout()">Sair</button>
+      </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="action-cards">
+      <div class="action-card" onclick="abrirModal('novaConversaModal')">
+        <div class="action-icon">💬</div>
+        <div class="action-title">Nova Conversa</div>
+        <p class="action-description">Inicie um atendimento através de seu canal preferido</p>
+        <button class="action-button">Começar</button>
+      </div>
+
+      <div class="action-card">
+        <div class="action-icon">📅</div>
+        <div class="action-title">Agendamentos</div>
+        <p class="action-description">Visualize suas consultas marcadas</p>
+        <button class="action-button">Ver Agendamentos</button>
+      </div>
+
+      <div class="action-card">
+        <div class="action-icon">🔔</div>
+        <div class="action-title">Notificações</div>
+        <p class="action-description">Acompanhe lembretes e confirmações</p>
+        <button class="action-button">Ver Notificações</button>
+      </div>
+    </div>
+
+    <!-- Canais de Atendimento -->
+    <div class="channels-section">
+      <h2 class="channels-title">Canais de Atendimento Disponíveis</h2>
+      <div class="channels-grid">
+        <div class="channel-item" onclick="selecionarCanal('whatsapp')">
+          <div class="channel-icon">📱</div>
+          <div class="channel-name">WhatsApp</div>
+        </div>
+        <div class="channel-item" onclick="selecionarCanal('instagram')">
+          <div class="channel-icon">📷</div>
+          <div class="channel-name">Instagram</div>
+        </div>
+        <div class="channel-item" onclick="selecionarCanal('facebook')">
+          <div class="channel-icon">👥</div>
+          <div class="channel-name">Facebook</div>
+        </div>
+        <div class="channel-item" onclick="selecionarCanal('email')">
+          <div class="channel-icon">📧</div>
+          <div class="channel-name">E-mail</div>
+        </div>
+        <div class="channel-item" onclick="selecionarCanal('chat')">
+          <div class="channel-icon">💬</div>
+          <div class="channel-name">Chat</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Minhas Conversas -->
+    <div class="conversations-section">
+      <h2 class="conversations-title">Minhas Conversas</h2>
+
+      <div class="conversation-card">
+        <div class="conversation-header">
+          <span class="conversation-title">📱 Agendamento de Consulta - Cardiologia</span>
+          <span class="badge badge-success">Resolvido</span>
+        </div>
+        <div class="conversation-meta">
+          <span>📅 Iniciada: 10/11/2025</span>
+          <span>⏱️ 2 horas atrás</span>
+        </div>
+        <div class="conversation-preview">
+          Conversa sobre agendamento de consulta com cardiologista. Consulta marcada para 15/11/2025 às 14h.
+        </div>
+        <div class="conversation-actions">
+          <button class="btn btn-primary btn-small">Ver Conversa</button>
+          <button class="btn btn-secondary btn-small">Avaliar</button>
+        </div>
+      </div>
+
+      <div class="conversation-card">
+        <div class="conversation-header">
+          <span class="conversation-title">📷 Resultado de Exame</span>
+          <span class="badge badge-primary">Em Andamento</span>
+        </div>
+        <div class="conversation-meta">
+          <span>📅 Iniciada: 12/11/2025</span>
+          <span>⏱️ 30 minutos atrás</span>
+        </div>
+        <div class="conversation-preview">
+          Aguardando resultado do exame de sangue solicitado. Atendente está verificando os dados.
+        </div>
+        <div class="conversation-actions">
+          <button class="btn btn-primary btn-small">Continuar Conversa</button>
+        </div>
+      </div>
+
+      <div class="conversation-card">
+        <div class="conversation-header">
+          <span class="conversation-title">👥 Informações sobre Convênio</span>
+          <span class="badge badge-warning">Aguardando Resposta</span>
+        </div>
+        <div class="conversation-meta">
+          <span>📅 Iniciada: 12/11/2025</span>
+          <span>⏱️ 1 hora atrás</span>
+        </div>
+        <div class="conversation-preview">
+          Dúvida sobre cobertura de procedimento pelo convênio. Aguardando resposta do atendente.
+        </div>
+        <div class="conversation-actions">
+          <button class="btn btn-primary btn-small">Continuar Conversa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Nova Conversa -->
+  <div id="novaConversaModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Iniciar Nova Conversa</h2>
+        <button class="modal-close" onclick="fecharModal('novaConversaModal')">✕</button>
+      </div>
+
+      <form onsubmit="enviarNovaConversa(event)">
+        <div class="form-group">
+          <label for="canal">Canal de Comunicação *</label>
+          <select id="canal" required>
+            <option value="">Selecione um canal</option>
+            <option value="whatsapp">📱 WhatsApp</option>
+            <option value="instagram">📷 Instagram</option>
+            <option value="facebook">👥 Facebook</option>
+            <option value="email">📧 E-mail</option>
+            <option value="chat">💬 Chat</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="assunto">Assunto *</label>
+          <input type="text" id="assunto" placeholder="Ex: Agendamento de consulta" required>
+        </div>
+
+        <div class="form-group">
+          <label for="mensagem">Mensagem *</label>
+          <textarea id="mensagem" placeholder="Descreva sua solicitação ou dúvida..." required></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Enviar Mensagem</button>
+          <button type="button" class="btn-secondary" onclick="fecharModal('novaConversaModal')">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script>
+    // Verificar autenticação
+    if (!estaAutenticado()) {
+      window.location.href = '/pages/login.html';
+    }
+
+    // Carregar dados do usuário
+    const usuario = JSON.parse(localStorage.getItem('user') || '{}');
+    document.getElementById('userGreeting').textContent = `Bem-vindo(a), ${usuario.name}! Aqui você pode acompanhar suas conversas e agendamentos`;
+
+    function selecionarCanal(canal) {
+      document.getElementById('canal').value = canal;
+      abrirModal('novaConversaModal');
+    }
+
+    function enviarNovaConversa(event) {
+      event.preventDefault();
+
+      const canal = document.getElementById('canal').value;
+      const assunto = document.getElementById('assunto').value;
+      const mensagem = document.getElementById('mensagem').value;
+
+      if (!canal || !assunto || !mensagem) {
+        mostrarNotificacao('Por favor, preencha todos os campos', 'danger');
+        return;
+      }
+
+      mostrarNotificacao('Conversa iniciada com sucesso! Um atendente entrará em contato em breve.', 'success');
+      fecharModal('novaConversaModal');
+
+      // Limpar formulário
+      document.querySelector('form').reset();
+    }
+
+    function mudarPerfil() {
+      window.location.href = '/pages/role-selection.html';
+    }
+
+    function fazerLogout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/pages/login.html';
+    }
+
+    // Fechar modal ao clicar fora
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
